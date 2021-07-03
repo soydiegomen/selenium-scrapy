@@ -28,24 +28,26 @@ class CountriesSpiderSpider(scrapy.Spider):
         driver = webdriver.Chrome(desired_capabilities=desired_capabilities)
 
         # Getting list of Countries
-        driver.get("http://quotes.toscrape.com")
+        #driver.get("https://www.pullandbear.com/mx/rebajas/hombre/favoritos-n6705")
+        driver.get("https://parallel.properties/#/")
+        #driver.get("http://quotes.toscrape.com")
 
         # Implicit wait
         driver.implicitly_wait(10)
 
         # Explicit wait
         wait = WebDriverWait(driver, 5)
-        wait.until(EC.presence_of_element_located((By.CLASS_NAME, "card-body")))
+        wait.until(EC.presence_of_element_located((By.CLASS_NAME, "card-img-top")))
 
         # Extracting country names
-        countries = driver.find_elements_by_class_name("text-lighter")
-        countries_count = 0
+        products = driver.find_elements_by_class_name("card-body")
+        products_count = 0
         # Using Scrapy's yield to store output instead of explicitly writing to a JSON file
-        for country in countries:
+        for product in products:
             yield {
-                "feature": country.text,
+                "product": product.text,
             }
-            countries_count += 1
+            products_count += 1
 
         driver.quit()
-        logger.info(f"Total de items: {countries_count}")
+        logger.info(f"Total de items: {products_count}")

@@ -129,6 +129,6 @@ dmypy.json
 .pyre/
 
 # Project
-parallel_info.json
+webapp_info.json
 countries_list.json
-countries-page.html
+page-result.html

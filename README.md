@@ -27,5 +27,5 @@ Después de instalarlo tuve que ejecutarlo directo en la carpeta ya que no permi
 $ scrapy crawl common_spider
 
 +App web (sitio dinámico)
-$ scrapy crawl webapp_spider -o parallel_info.json
+$ scrapy crawl webapp_spider -o webapp_info.json
 
