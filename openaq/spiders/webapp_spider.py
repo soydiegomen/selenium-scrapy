@@ -28,8 +28,8 @@ class CountriesSpiderSpider(scrapy.Spider):
         driver = webdriver.Chrome(desired_capabilities=desired_capabilities)
 
         # Getting list of Countries
-        #driver.get("https://www.pullandbear.com/mx/rebajas/hombre/favoritos-n6705")
-        driver.get("https://parallel.properties/#/")
+        driver.get("https://www.pullandbear.com/mx/rebajas/hombre/favoritos-n6705")
+        #driver.get("https://parallel.properties/#/")
         #driver.get("http://quotes.toscrape.com")
 
         # Implicit wait
@@ -37,10 +37,10 @@ class CountriesSpiderSpider(scrapy.Spider):
 
         # Explicit wait
         wait = WebDriverWait(driver, 5)
-        wait.until(EC.presence_of_element_located((By.CLASS_NAME, "card-img-top")))
+        wait.until(EC.presence_of_element_located((By.CLASS_NAME, "new-category-page")))
 
         # Extracting country names
-        products = driver.find_elements_by_class_name("card-body")
+        products = driver.find_elements_by_class_name("posicionamiento")
         products_count = 0
         # Using Scrapy's yield to store output instead of explicitly writing to a JSON file
         for product in products:
