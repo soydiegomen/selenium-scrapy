@@ -5,10 +5,13 @@ class ClothingstoreSpider(scrapy.Spider):
     #Dinamica
     #start_urls = ['https://www.pullandbear.com/mx/rebajas/hombre/favoritos-n6705']
     #Estatica
-    start_urls = ['https://www.lotherington.mx/liquidaci%C3%B3n']
+    #start_urls = ['https://www.lotherington.mx/liquidaci%C3%B3n']
+    #start_urls = ['https://malinali.store/collections/all']
+    #start_urls = ['https://nataliaa-artwork.company.site/']
+    start_urls = ['https://libreliebre.com/collections/playeras-para-mujer']
 
     def parse(self, response):
-        filename = f'page-result-lotherington.html'
+        filename = f'page-result-libreliebre.html'
         with open(filename, 'wb') as f:
             f.write(response.body)
         self.log(f'Saved file {filename}')
