@@ -8,12 +8,33 @@
 from itemadapter import ItemAdapter
 from sqlalchemy.orm import sessionmaker
 from scrapy.exceptions import DropItem
+import logging
 from openaq.spiders.models import Quote, Author, Tag, db_connect, create_table
 
 
-class OpenaqPipeline:
+class DuplicatesPipeline(object):
+
+    def __init__(self):
+        """
+        Initializes database connection and sessionmaker.
+        Creates tables.
+        """
+        logging.warning('#INIT3-DuplicatesPipeline')
+        engine = db_connect()
+        create_table(engine)
+        self.Session = sessionmaker(bind=engine)
+        logging.info("****DuplicatesPipeline: database connected****")
+
     def process_item(self, item, spider):
-        return item
+        logging.warning('#INIT3-DuplicatesPipeline-process_item')
+        session = self.Session()
+        exist_quote = session.query(Quote).filter_by(quote_content = item["quote_content"]).first()
+        if exist_quote is not None:  # the current quote exists
+            raise DropItem("Duplicate item found: %s" % item["quote_content"])
+            session.close()
+        else:
+            return item
+            session.close()
 
 class SaveQuotesPipeline(object):
     def __init__(self):
@@ -21,6 +42,7 @@ class SaveQuotesPipeline(object):
         Initializes database connection and sessionmaker
         Creates tables
         """
+        logging.warning('#INIT3')
         engine = db_connect()
         create_table(engine)
         self.Session = sessionmaker(bind=engine)
@@ -30,6 +52,8 @@ class SaveQuotesPipeline(object):
         """Save quotes in the database
         This method is called for every item pipeline component
         """
+        logging.warning('#INIT3-SaveQuotesPipeline-process_item')
+        #logging.warning('#author_name: {}'.format(author.name))
         session = self.Session()
         quote = Quote()
         author = Author()

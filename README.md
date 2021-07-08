@@ -21,6 +21,14 @@ https://www.tutorialspoint.com/how-to-install-selenium-webdriver-on-mac-os
 https://formulae.brew.sh/cask/chromedriver 
 Después de instalarlo tuve que ejecutarlo directo en la carpeta ya que no permitía abrirlo por haberse descargado de internet.
 
+## Comandos SQLite
+
+$ sqlite3 scrapy_quotes.db
+...
+sqlite> .tables
+author     quote      quote_tag  tag
+sqlite> select * from quote limit 3;
+sqlite> .quit
 
 ## DMG spiders
 +Sitio estático
@@ -29,3 +37,5 @@ $ scrapy crawl common_spider
 +App web (sitio dinámico)
 $ scrapy crawl webapp_spider -o webapp_info.json
 
++Conection to sqlite
+$ scrapy crawl quotes

@@ -62,8 +62,9 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+
 ITEM_PIPELINES = {
-    'openaq.pipelines.OpenaqPipeline': 300,
+    'openaq.pipelines.SaveQuotesPipeline': 100,
 }
 
 CONNECTION_STRING = 'sqlite:///scrapy_quotes.db'

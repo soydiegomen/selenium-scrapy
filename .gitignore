@@ -132,3 +132,4 @@ dmypy.json
 webapp_info.json
 countries_list.json
 page-result*
+scrapy_quotes.db
