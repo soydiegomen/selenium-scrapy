@@ -9,26 +9,36 @@ from itemadapter import ItemAdapter
 from sqlalchemy.orm import sessionmaker
 from scrapy.exceptions import DropItem
 import logging
+
+from sqlalchemy.sql.elements import Null
 from openaq.spiders.models import Quote, Author, Tag, db_connect, create_table
 
+def setup_logger():
+    logger = logging.getLogger('scrapper_app')
+    logger.setLevel(logging.DEBUG)
+    fh = logging.FileHandler('scrapper_app.log')
+    fh.setLevel(logging.DEBUG)
+    logger.addHandler(fh)
+    return logger
 
 class DuplicatesPipeline(object):
+    logger = Null
 
     def __init__(self):
         """
         Initializes database connection and sessionmaker.
         Creates tables.
         """
-        logging.warning('#INIT3-DuplicatesPipeline')
+        self.logger = setup_logger()
+
         engine = db_connect()
         create_table(engine)
         self.Session = sessionmaker(bind=engine)
-        logging.info("****DuplicatesPipeline: database connected****")
 
     def process_item(self, item, spider):
-        logging.warning('#INIT3-DuplicatesPipeline-process_item')
         session = self.Session()
         exist_quote = session.query(Quote).filter_by(quote_content = item["quote_content"]).first()
+
         if exist_quote is not None:  # the current quote exists
             raise DropItem("Duplicate item found: %s" % item["quote_content"])
             session.close()
@@ -37,12 +47,14 @@ class DuplicatesPipeline(object):
             session.close()
 
 class SaveQuotesPipeline(object):
+    logger = Null
+
     def __init__(self):
         """
         Initializes database connection and sessionmaker
         Creates tables
         """
-        logging.warning('#INIT3')
+        self.logger = setup_logger()
         engine = db_connect()
         create_table(engine)
         self.Session = sessionmaker(bind=engine)
@@ -52,8 +64,7 @@ class SaveQuotesPipeline(object):
         """Save quotes in the database
         This method is called for every item pipeline component
         """
-        logging.warning('#INIT3-SaveQuotesPipeline-process_item')
-        #logging.warning('#author_name: {}'.format(author.name))
+        
         session = self.Session()
         quote = Quote()
         author = Author()
@@ -63,6 +74,7 @@ class SaveQuotesPipeline(object):
         author.bornlocation = item["author_bornlocation"]
         author.bio = item["author_bio"]
         quote.quote_content = item["quote_content"]
+        self.logger.info('#Saving Quote: {}'.format(item["quote_content"]) )
 
         # check whether the author exists
         exist_author = session.query(Author).filter_by(name = author.name).first()

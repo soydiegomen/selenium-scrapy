@@ -25,10 +25,17 @@ Después de instalarlo tuve que ejecutarlo directo en la carpeta ya que no permi
 
 $ sqlite3 scrapy_quotes.db
 ...
-sqlite> .tables
-author     quote      quote_tag  tag
-sqlite> select * from quote limit 3;
-sqlite> .quit
+.tables
+#author     quote      quote_tag  tag
+
+select COUNT(*) from quote;
+select * from quote limit 3;
+.quit
+
+----
+DELETE FROM quote_tag;
+DELETE FROM author;
+DELETE FROM quote;
 
 ## DMG spiders
 +Sitio estático
@@ -37,5 +44,5 @@ $ scrapy crawl common_spider
 +App web (sitio dinámico)
 $ scrapy crawl webapp_spider -o webapp_info.json
 
-+Conection to sqlite
++Saving quotes in sqlite
 $ scrapy crawl quotes

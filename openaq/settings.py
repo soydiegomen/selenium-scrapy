@@ -64,7 +64,8 @@ ROBOTSTXT_OBEY = True
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 
 ITEM_PIPELINES = {
-    'openaq.pipelines.SaveQuotesPipeline': 100,
+    'openaq.pipelines.DuplicatesPipeline': 100,
+    'openaq.pipelines.SaveQuotesPipeline': 200,
 }
 
 CONNECTION_STRING = 'sqlite:///scrapy_quotes.db'
@@ -89,3 +90,6 @@ CONNECTION_STRING = 'sqlite:///scrapy_quotes.db'
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+#DMG Unable the logs
+LOG_ENABLED=False
