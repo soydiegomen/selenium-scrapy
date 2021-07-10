@@ -22,15 +22,11 @@ def setup_logger():
     return logger
 
 class DuplicatesPipeline(object):
-    logger = Null
+    logger = None
+    session = None
 
     def __init__(self):
-        """
-        Initializes database connection and sessionmaker.
-        Creates tables.
-        """
         self.logger = setup_logger()
-
         engine = db_connect()
         create_table(engine)
         self.Session = sessionmaker(bind=engine)
@@ -47,13 +43,10 @@ class DuplicatesPipeline(object):
             session.close()
 
 class SaveQuotesPipeline(object):
-    logger = Null
+    logger = None
+    session = None
 
     def __init__(self):
-        """
-        Initializes database connection and sessionmaker
-        Creates tables
-        """
         self.logger = setup_logger()
         engine = db_connect()
         create_table(engine)
@@ -61,10 +54,7 @@ class SaveQuotesPipeline(object):
 
 
     def process_item(self, item, spider):
-        """Save quotes in the database
-        This method is called for every item pipeline component
-        """
-        
+                
         session = self.Session()
         quote = Quote()
         author = Author()
