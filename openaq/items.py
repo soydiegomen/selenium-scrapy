@@ -58,3 +58,7 @@ class QuoteItem(Item):
         output_processor=TakeFirst()
         )
     tags = Field()
+
+class ProductItem(scrapy.Item):
+    name = scrapy.Field()
+    price = scrapy.Field()

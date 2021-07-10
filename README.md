@@ -46,3 +46,6 @@ $ scrapy crawl webapp_spider -o webapp_info.json
 
 +Saving quotes in sqlite
 $ scrapy crawl quotes
+
++Saving products in mysql
+$ scrapy crawl products_spider

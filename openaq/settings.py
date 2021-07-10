@@ -32,7 +32,8 @@ USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTM
 ROBOTSTXT_OBEY = True
 
 ITEM_PIPELINES = {
-    'openaq.pipelines.DuplicatesPipeline': 100,
+    'openaq.pipelines.SaveProductsPipeline': 100,
+    #'openaq.pipelines.DuplicatesPipeline': 100,
     #'openaq.pipelines.SaveQuotesPipeline': 200,
 }
 
@@ -41,4 +42,4 @@ CONNECTION_STRING = 'mysql+mysqlconnector://root:root@localhost:8889/scrapy_test
 
 
 #DMG Unable the logs
-LOG_ENABLED=False
+#LOG_ENABLED=False

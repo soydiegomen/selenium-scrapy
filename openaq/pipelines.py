@@ -6,11 +6,12 @@
 
 # useful for handling different item types with a single interface
 import logging
+import re
 from itemadapter import ItemAdapter
 from sqlalchemy.orm import sessionmaker
 from scrapy.exceptions import DropItem
 from sqlalchemy.sql.elements import Null
-from openaq.spiders.models import Quote, Author, Tag, db_connect, create_table
+from openaq.spiders.models import Quote, Author, Tag, Product, db_connect, create_table
 
 def setup_logger():
     logger = logging.getLogger('scrapper_app')
@@ -84,6 +85,47 @@ class SaveQuotesPipeline(object):
 
         try:
             session.add(quote)
+            session.commit()
+
+        except:
+            session.rollback()
+            raise
+
+        finally:
+            session.close()
+
+        return item
+
+
+class SaveProductsPipeline(object):
+    logger = None
+    session = None
+
+    def __init__(self):
+        self.logger = setup_logger()
+        self.logger.info('#Initialize SaveProductsPipeline')
+        engine = db_connect()
+        create_table(engine)
+        self.Session = sessionmaker(bind=engine)
+
+
+    def process_item(self, item, spider):
+        session = self.Session()
+        self.logger.info('#Saving Author')
+        product = Product()
+        product.name = item["name"][0]
+
+        priceString = item["price"][0]
+        trim = re.compile(r'[^\d.,]+')
+        priceNumber = trim.sub('', priceString)
+        product.price = float(priceNumber)
+
+        #product.detail_url = "http:://google.com"
+        #product.thumbnail_url = "http:://google.com"
+        self.logger.info('#Product-to-save: {}'.format(item["name"]) )
+
+        try:
+            session.add(product)
             session.commit()
 
         except:

@@ -53,7 +53,7 @@ class Tag(Base):
         lazy='dynamic', backref="tag")  # M-to-M for quote and tag
 
 #DMG Models for test
-class Products(Base):
+class Product(Base):
     __tablename__ = "products"
     id = Column(Integer, primary_key=True)
     name = Column('name', String(50))
