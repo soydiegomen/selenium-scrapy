@@ -2,7 +2,7 @@ from sqlalchemy import create_engine, Column, Table, ForeignKey, MetaData
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import (
-    Integer, String, Date, DateTime, Float, Boolean, Text)
+    Integer, String, Date, DateTime, Float, Boolean, Text, Numeric)
 from scrapy.utils.project import get_project_settings
 
 Base = declarative_base()
@@ -51,3 +51,12 @@ class Tag(Base):
     name = Column('name', String(30), unique=True)
     quotes = relationship('Quote', secondary='quote_tag',
         lazy='dynamic', backref="tag")  # M-to-M for quote and tag
+
+#DMG Models for test
+class Products(Base):
+    __tablename__ = "products"
+    id = Column(Integer, primary_key=True)
+    name = Column('name', String(50))
+    price = Column('price', Numeric(precision=8))
+    detail_url = Column('detail_url', String(500))
+    thumbnail_url = Column('thumbnail_url', String(500))

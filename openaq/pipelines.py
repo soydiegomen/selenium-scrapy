@@ -5,11 +5,10 @@
 
 
 # useful for handling different item types with a single interface
+import logging
 from itemadapter import ItemAdapter
 from sqlalchemy.orm import sessionmaker
 from scrapy.exceptions import DropItem
-import logging
-
 from sqlalchemy.sql.elements import Null
 from openaq.spiders.models import Quote, Author, Tag, db_connect, create_table
 
@@ -54,7 +53,7 @@ class SaveQuotesPipeline(object):
 
 
     def process_item(self, item, spider):
-                
+
         session = self.Session()
         quote = Quote()
         author = Author()

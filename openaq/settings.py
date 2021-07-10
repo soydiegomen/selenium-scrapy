@@ -33,7 +33,7 @@ ROBOTSTXT_OBEY = True
 
 ITEM_PIPELINES = {
     'openaq.pipelines.DuplicatesPipeline': 100,
-    'openaq.pipelines.SaveQuotesPipeline': 200,
+    #'openaq.pipelines.SaveQuotesPipeline': 200,
 }
 
 #CONNECTION_STRING = 'sqlite:///scrapy_quotes.db'
