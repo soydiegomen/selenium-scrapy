@@ -11,7 +11,8 @@ from itemadapter import ItemAdapter
 from sqlalchemy.orm import sessionmaker
 from scrapy.exceptions import DropItem
 from sqlalchemy.sql.elements import Null
-from openaq.spiders.models import Quote, Author, Tag, Product, db_connect, create_table
+from  sqlalchemy.sql.expression import select
+from openaq.spiders.models import Quote, Author, Tag, Product, Comment, db_connect, create_table
 
 def setup_logger():
     logger = logging.getLogger('scrapper_app')
@@ -112,6 +113,9 @@ class SaveProductsPipeline(object):
     def process_item(self, item, spider):
         session = self.Session()
         self.logger.info('#Saving Author')
+        comment = Comment()
+        comment.detail = 'Nota del producto {}' . format(item["name"][0])
+
         product = Product()
         product.name = item["name"][0]
 
@@ -123,10 +127,13 @@ class SaveProductsPipeline(object):
         #product.detail_url = "http:://google.com"
         #product.thumbnail_url = "http:://google.com"
         self.logger.info('#Product-to-save: {}'.format(item["name"]) )
+        comment.product = product
 
         try:
-            session.add(product)
+            #session.add(product)
+            session.add(comment)
             session.commit()
+            self.logger.info('#Guardo el comment')
 
         except:
             session.rollback()
@@ -136,3 +143,30 @@ class SaveProductsPipeline(object):
             session.close()
 
         return item
+
+class SearchProducts(object):
+    logger = None
+    session = None
+
+    def __init__(self):
+        self.logger = setup_logger()
+        engine = db_connect()
+        create_table(engine)
+        self.Session = sessionmaker(bind=engine)
+
+    def process_item(self, item, spider):
+        self.logger.info('#Searching products')
+        session = self.Session()
+        #products = session.execute(select(Product).order_by(Product.id))
+        #comments = session.execute(select(Comment).where(Comment.id == '6').order_by(Comment.id))
+        #comments = session.execute(select(Comment).where(Comment.id.in_('1','6','10')).order_by(Comment.id))
+        comments = session.query(Comment).filter(Comment.id.in_((1,6))).all()
+
+        #for comment in comments.scalars():
+        for comment in comments:
+            #self.logger.info(f"{product.name} {product.price}")
+            #self.logger.info(f"{comment.id} {comment.product.name}")
+            self.logger.info(f"{comment.id} {comment.product.name}")
+            #self.logger.info(f"{product.name} {product.price}")
+
+        session.close()

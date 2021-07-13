@@ -60,3 +60,11 @@ class Product(Base):
     price = Column('price', Numeric(precision=8))
     detail_url = Column('detail_url', String(500))
     thumbnail_url = Column('thumbnail_url', String(500))
+    comments = relationship("Comment", backref='product')
+
+
+class Comment(Base):
+    __tablename__ = "comments"
+    id = Column(Integer, primary_key=True)
+    detail = Column('detail', String(500))
+    product_id = Column(Integer, ForeignKey('products.id'))
